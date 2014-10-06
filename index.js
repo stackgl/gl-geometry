@@ -16,6 +16,16 @@ function GLGeometry(gl) {
   this.gl = gl
 }
 
+GLGeometry.prototype.dispose = function() {
+    this._attributes.forEach(function(a) {
+        a.buffer.dispose()
+    })
+    if (this._index)
+      this._index.dispose()
+    if (this._vao)
+      this._vao.dispose()
+}
+
 GLGeometry.prototype.faces = function faces(attr, opts) {
   var size = opts && opts.size || 3
   attr = attr.cells ? attr.cells : attr
