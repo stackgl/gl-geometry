@@ -108,6 +108,10 @@ with `gl.drawArrays` or `gl.drawElements`.
 Unbinds the underlying VAO. This *must* be done when you're finished drawing,
 unless you're binding to another gl-geometry or gl-vao instance.
 
+### geom.dispose() ###
+
+Disposes the underlying element and array buffers, as well as the VAO.
+
 ## See Also
 
 * [ArrayBuffer and Typed Arrays](https://www.khronos.org/registry/webgl/specs/1.0/#5.13)
