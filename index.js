@@ -21,6 +21,10 @@ GLGeometry.prototype.faces = function faces(attr, opts) {
   attr = attr.cells ? attr.cells : attr
 
   this._dirty = true
+
+  if (this._index)
+    this._index.dispose()
+
   this._index = normalize(this.gl
     , attr
     , size
