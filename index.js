@@ -17,13 +17,21 @@ function GLGeometry(gl) {
 }
 
 GLGeometry.prototype.dispose = function() {
-    this._attributes.forEach(function(a) {
-        a.buffer.dispose()
-    })
-    if (this._index)
-      this._index.dispose()
-    if (this._vao)
-      this._vao.dispose()
+  for (var i = 0; i < this._attributes.length; i++) {
+    this._attributes[i].buffer.dispose()
+  }
+
+  this._attributes = []
+
+  if (this._index) {
+    this._index.dispose()
+    this._index = null
+  }
+
+  if (this._vao) {
+    this._vao.dispose()
+    this._vao = null
+  }
 }
 
 GLGeometry.prototype.faces = function faces(attr, opts) {
@@ -32,8 +40,9 @@ GLGeometry.prototype.faces = function faces(attr, opts) {
 
   this._dirty = true
 
-  if (this._index)
+  if (this._index) {
     this._index.dispose()
+  }
 
   this._index = normalize(this.gl
     , attr
