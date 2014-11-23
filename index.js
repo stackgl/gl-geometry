@@ -65,7 +65,7 @@ GLGeometry.prototype.attr = function attr(name, attr, opts) {
   var first = !this._attributes.length
   var size = opts.size || 3
 
-  var attribute = normalize(gl, attr, size, undefined, 'float32')
+  var attribute = normalize(gl, attr, size, gl.ARRAY_BUFFER, 'float32')
   if (!attribute) {
     throw new Error(
         'Unexpected attribute format: needs an ndarray, array, typed array, '
