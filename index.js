@@ -110,7 +110,10 @@ GLGeometry.prototype.bind = function bind(shader) {
 
 GLGeometry.prototype.draw = function draw(mode) {
   this.update()
-  this._vao.draw(mode || this.gl.TRIANGLES, this._length)
+  if(mode === undefnied) {
+    mode = this.gl.TRIANGLES
+  }
+  this._vao.draw(mode, this._length)
 }
 
 GLGeometry.prototype.unbind = function unbind() {
