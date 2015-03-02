@@ -12,7 +12,7 @@ set up renderable WebGL geometries from a variety of different formats.
 
 Creates a new geometry attached to the WebGL canvas context `gl`.
 
-### geom.attr(name, values) ###
+### geom.attr(name, values[, opt]) ###
 
 Define a new attribute value, for example using a simplicial complex:
 
@@ -55,8 +55,10 @@ The following vertex formats are supported and will be normalized:
     ]
   }
   ```
+  
+You can specify `opt.size` for the vertex size, defaults to 3.
 
-### geom.faces(values) ###
+### geom.faces(values[, opt]) ###
 
 Pass a simplicial complex's `cells` property here in any of the above formats
 to use it as your index when drawing the geometry. For example:
@@ -75,6 +77,8 @@ var geom = createGeometry(gl)
   .attr('normals', bunny.normals)
   .faces(bunny.cells)
 ```
+
+You can specify `opt.size` for the cell size, defaults to 3.
 
 ### geom.bind([shader]) ###
 
