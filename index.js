@@ -116,9 +116,9 @@ GLGeometry.prototype.draw = function draw(mode, start, stop) {
   this.update()
 
   if (this._vao._useElements) {
-    gl.drawElements(mode, stop - start, this._vao._elementsType, start)
+    this.gl.drawElements(mode, stop - start, this._vao._elementsType, start)
   } else {
-    gl.drawArrays(mode, start, stop - start)
+    this.gl.drawArrays(mode, start, stop - start)
   }
 }
 
