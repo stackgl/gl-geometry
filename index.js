@@ -108,12 +108,18 @@ GLGeometry.prototype.bind = function bind(shader) {
   }
 }
 
-GLGeometry.prototype.draw = function draw(mode) {
+GLGeometry.prototype.draw = function draw(mode, start, stop) {
+  start = typeof start === 'undefined' ? 0 : start
+  stop  = typeof stop  === 'undefined' ? this._length : stop
+  mode  = typeof mode  === 'undefined' ? this.gl.TRIANGLES : mode
+
   this.update()
-  this._vao.draw(typeof mode === 'undefined'
-    ? this.gl.TRIANGLES
-    : mode
-  , this._length)
+
+  if (this._vao._useElements) {
+    gl.drawElements(mode, stop - start, this._vao._elementsType, start)
+  } else {
+    gl.drawArrays(mode, start, stop - start)
+  }
 }
 
 GLGeometry.prototype.unbind = function unbind() {
