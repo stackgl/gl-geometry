@@ -98,14 +98,14 @@ GLGeometry.prototype.bind = function bind(shader) {
   this.update()
   this._vao.bind()
 
-  if (!shader) return
-  shader.bind()
-
   if (!this._keys) return
   for (var i = 0; i < this._keys.length; i++) {
     var attr = shader.attributes[this._keys[i]]
     if (attr) attr.location = i
   }
+
+  if (!shader) return
+  shader.bind()
 }
 
 GLGeometry.prototype.draw = function draw(mode, start, stop) {
