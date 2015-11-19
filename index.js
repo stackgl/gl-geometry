@@ -22,6 +22,9 @@ GLGeometry.prototype.dispose = function() {
   }
 
   this._attributes = []
+  this._keys = []
+  this._length = 0
+  this._dirty = true
 
   if (this._index) {
     this._index.dispose()
