@@ -9,6 +9,7 @@ var ndarray       = require('ndarray')
 var normals       = require('normals')
 var glslify       = require('glslify')
 var bunny         = require('bunny')
+var createShader  = require('gl-shader')
 
 var createGeom    = require('./')
 var clear         = require('gl-clear')({
@@ -43,11 +44,11 @@ function createExample(pos, norm, cells) {
   var gl         = createContext(canvas, render)
   var camera     = createCamera(canvas)
   var projection = mat4.create()
-  var shader     = glslify({
-      vert: './test.vert'
-    , frag: './test.frag'
-  })(gl)
-
+  var shader     = createShader(gl,
+    glslify('./test.vert'),
+    glslify('./test.frag')
+  )
+  
   canvas.width = 300
   canvas.height = 300
   canvas.style.margin = '1em'
