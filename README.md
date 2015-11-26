@@ -1,7 +1,7 @@
 # gl-geometry [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-A flexible wrapper for [gl-vao](http://github.com/mikolalysenko/gl-vao)
-and [gl-buffer](http://github.com/mikolalysenko/gl-buffer) that you can use to
+A flexible wrapper for [gl-vao](http://github.com/stackgl/gl-vao)
+and [gl-buffer](http://github.com/stackgl/gl-buffer) that you can use to
 set up renderable WebGL geometries from a variety of different formats.
 
 ## Usage ##
@@ -33,7 +33,7 @@ The following vertex formats are supported and will be normalized:
 * [Typed arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays),
   preferably a `Float32Array`.
 
-* 1-dimensional [ndarrays](http://github.com/mikolalysenko/ndarray).
+* 1-dimensional [ndarrays](https://github.com/scijs/ndarray).
 
 * [simplicial complexes](https://github.com/mikolalysenko/simplicial-complex),
   i.e. an object with a `positions` array and a `cells` array. The former is
@@ -82,10 +82,9 @@ You can specify `opt.size` for the cell size, defaults to 3.
 
 ### geom.bind([shader]) ###
 
-Binds the underlying [VAO](https://github.com/gl-modules/gl-vao) – this must
+Binds the underlying [VAO](https://github.com/stackgl/gl-vao) – this must
 be called before calling `geom.draw`. Optionally, you can pass in a
-[gl-shader](http://github.com/gl-modules/gl-shader) or
-[glslify](http://github.com/chrisdickinson/glslify) shader instance to
+[gl-shader](http://github.com/stackgl/gl-shader) to
 automatically set up your attribute locations for you.
 
 ### geom.draw(mode, start, stop) ###
@@ -121,10 +120,10 @@ Disposes the underlying element and array buffers, as well as the VAO.
 * [ArrayBuffer and Typed Arrays](https://www.khronos.org/registry/webgl/specs/1.0/#5.13)
 * [The WebGL Context](https://www.khronos.org/registry/webgl/specs/1.0/#5.14)
 * [simplicial-complex](http://github.com/mikolalysenko/simplicial-complex)
-* [ndarray](http://github.com/mikolalysenko/ndarray)
-* [gl-shader](http://github.com/mikolalysenko/gl-shader)
-* [gl-buffer](http://github.com/mikolalysenko/gl-buffer)
-* [gl-vao](http://github.com/mikolalysenko/gl-vao)
+* [ndarray](https://github.com/scijs/ndarray)
+* [gl-shader](https://github.com/stackgl/gl-shader)
+* [gl-buffer](https://github.com/stackgl/gl-buffer)
+* [gl-vao](https://github.com/stackgl/gl-vao)
 
 ## License
 
