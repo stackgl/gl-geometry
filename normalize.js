@@ -15,6 +15,14 @@ function normalize(gl, attr, size, mode, type) {
     }
   }
 
+  // if we get a nested 2D array (with the second array being typed)
+  if (Array.isArray(attr) && ista(attr[0])) {
+    return {
+        buffer: createBuffer(gl, pack(attr, type), mode)
+      , length: ( attr.length * attr[0].length ) / size
+    }
+  }
+
   // if we get a 1D array
   if (Array.isArray(attr)) {
     return {
