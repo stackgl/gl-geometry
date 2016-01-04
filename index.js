@@ -1,5 +1,7 @@
 var normalize = require('./normalize')
+var glType = require('gl-to-dtype')
 var createVAO = require('gl-vao')
+var dtype = require('dtype')
 
 module.exports = GLGeometry
 
@@ -7,6 +9,8 @@ function GLGeometry(gl) {
   if (!(this instanceof GLGeometry))
     return new GLGeometry(gl)
 
+  this._elementsType = 5123
+  this._elementsBytes = 2
   this._attributes = []
   this._dirty = true
   this._length = 0
@@ -119,7 +123,7 @@ GLGeometry.prototype.draw = function draw(mode, start, stop) {
   this.update()
 
   if (this._vao._useElements) {
-    this.gl.drawElements(mode, stop - start, this._vao._elementsType, start * 2) // "2" is sizeof(uint16)
+    this.gl.drawElements(mode, stop - start, this._elementsType, start * this._elementsBytes) // "2" is sizeof(uint16)
   } else {
     this.gl.drawArrays(mode, start, stop - start)
   }
@@ -140,4 +144,9 @@ GLGeometry.prototype.update = function update() {
     , this._attributes
     , this._index
   )
+
+  this._elementsType = this._vao._elementsType
+  this._elementsBytes = dtype(
+    glType(this._elementsType) || 'array'
+  ).BYTES_PER_ELEMENT || 2
 }

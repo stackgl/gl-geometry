@@ -12,6 +12,7 @@
     "array-pack-2d": "^0.1.0",
     "dtype": "^0.1.0",
     "gl-buffer": "^2.0.6",
+    "gl-to-dtype": "^1.1.0",
     "gl-vao": "^1.1.2",
     "is-typedarray": "0.0.0",
     "isndarray": "^0.1.0"
