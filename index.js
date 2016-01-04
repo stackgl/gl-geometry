@@ -119,7 +119,7 @@ GLGeometry.prototype.draw = function draw(mode, start, stop) {
   this.update()
 
   if (this._vao._useElements) {
-    this.gl.drawElements(mode, stop - start, this._vao._elementsType, start)
+    this.gl.drawElements(mode, stop - start, this._vao._elementsType, start * 2) // "2" is sizeof(uint16)
   } else {
     this.gl.drawArrays(mode, start, stop - start)
   }
