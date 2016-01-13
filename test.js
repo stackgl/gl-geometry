@@ -21,25 +21,28 @@ var clear         = require('gl-clear')({
 // handles simplicial complexes with cells/positions properties
 var scPos = bunny
 var scNor = normals.vertexNormals(bunny.cells, bunny.positions)
-createExample(scPos, scNor)
+createExample(scPos, scNor).title = 'Simplicial Complex'
 
 // handles Float32Arrays
 var uiPos = unindex(bunny.positions, bunny.cells)
 var uiNor = faceNormals(uiPos)
-createExample(uiPos, uiNor)
+createExample(uiPos, uiNor).title = 'Unindexed Mesh, Float32Arrays'
 
 // handles (flat) ndarrays
 var ndPos = ndarray(uiPos, [uiPos.length])
 var ndNor = ndarray(uiNor, [uiNor.length])
-createExample(ndPos, ndNor)
+createExample(ndPos, ndNor).title = 'Flat ndarrays'
 
 // also supports .faces() method
-createExample(scPos.positions, scNor, scPos.cells)
+createExample(scPos.positions, scNor, scPos.cells).title = '.faces(), Last Call'
 
 // also supports .faces() method with packed data
-createExample(pack(scPos.positions), scNor, pack(scPos.cells))
+createExample(pack(scPos.positions), scNor, pack(scPos.cells)).title = '.faces(), Packed Data'
 
-function createExample(pos, norm, cells) {
+// .faces(), order-independant
+createExample(scPos.positions, scNor, scPos.cells, true).title = '.faces(), First Call'
+
+function createExample(pos, norm, cells, facesFirst) {
   var canvas     = document.body.appendChild(document.createElement('canvas'))
   var gl         = createContext(canvas, render)
   var camera     = createCamera(canvas)
@@ -54,10 +57,12 @@ function createExample(pos, norm, cells) {
   canvas.style.margin = '1em'
 
   var geom = createGeom(gl)
-    .attr('position', pos)
+  if (cells && facesFirst) geom.faces(cells)
+  
+  geom.attr('position', pos)
     .attr('normal', norm)
 
-  if (cells) geom.faces(cells)
+  if (cells && !facesFirst) geom.faces(cells)
 
   function render() {
     var width  = canvas.width
@@ -84,4 +89,6 @@ function createExample(pos, norm, cells) {
 
     camera.tick()
   }
+  
+  return canvas
 }
