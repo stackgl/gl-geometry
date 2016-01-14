@@ -39,18 +39,6 @@ function normalize(gl, attr, size, mode, type) {
     }
   }
 
-  // if we get a simplicial complex
-  if (attr.cells && attr.positions) {
-    return {
-        length: attr.cells.length * size
-      , buffer: createBuffer(gl, pack(attr.positions, type), mode)
-      , index : createBuffer(gl
-        , pack(attr.cells, 'uint16')
-        , gl.ELEMENT_ARRAY_BUFFER
-      )
-    }
-  }
-
   // if we get an ndarray
   if (isnd(attr)) {
     return {

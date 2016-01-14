@@ -67,6 +67,12 @@ GLGeometry.prototype.faces = function faces(attr, opts) {
 }
 
 GLGeometry.prototype.attr = function attr(name, attr, opts) {
+
+  // If we get a simplicial complex
+  if (attr.cells && attr.positions) {
+    return this.attr(name, attr.positions).faces(attr.cells, opts)
+  }
+
   opts = opts || {}
   this._dirty = true
 
@@ -84,7 +90,6 @@ GLGeometry.prototype.attr = function attr(name, attr, opts) {
 
   var buffer = attribute.buffer
   var length = attribute.length
-  var index  = attribute.index
 
   this._keys.push(name)
   this._attributes.push({
@@ -92,18 +97,10 @@ GLGeometry.prototype.attr = function attr(name, attr, opts) {
     , buffer: buffer
   })
 
-  var isSimplicialComplex = Boolean(index)
-  var attrLength = isSimplicialComplex ? attr.positions.length : length
-
   if (first) {
-    this._attrLength = attrLength
+    this._attrLength = length
 
-    if (isSimplicialComplex) {
-      this._index = index
-      this._facesLength = length
-    }
-
-  } else if (this._attrLength != attrLength) {
+  } else if (this._attrLength != length) {
     throw new Error(
         'Unexpected discrepancy in attributes size (was ' + this_attrLength
       + ', now ' + attrLength+ ')'
