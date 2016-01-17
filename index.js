@@ -115,12 +115,13 @@ GLGeometry.prototype.bind = function bind(shader) {
   this._vao.bind()
 
   if (!this._keys) return
+  if (!shader) return
+
   for (var i = 0; i < this._keys.length; i++) {
     var attr = shader.attributes[this._keys[i]]
     if (attr) attr.location = i
   }
 
-  if (!shader) return
   shader.bind()
 }
 
