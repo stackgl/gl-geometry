@@ -61,7 +61,7 @@ You can specify `opt.size` for the vertex size, defaults to 3.
 ### geom.faces(values[, opt]) ###
 
 Pass a simplicial complex's `cells` property here in any of the above formats
-to use it as your index when drawing the geometry. This can only be called after all of the `.attr` calls. For example:
+to use it as your index when drawing the geometry. For example:
 
 ``` javascript
 var createGeometry = require('gl-geometry')

@@ -13,7 +13,8 @@ function GLGeometry(gl) {
   this._elementsBytes = 2
   this._attributes = []
   this._dirty = true
-  this._length = 0
+  this._attrLength = 0
+  this._facesLength = 0
   this._index = null
   this._vao = null
   this._keys = []
@@ -27,7 +28,8 @@ GLGeometry.prototype.dispose = function() {
 
   this._attributes = []
   this._keys = []
-  this._length = 0
+  this._attrLength = 0  // Length of this attribute (the number of vertices it feeds)
+  this._facesLength = 0 // Number of vertices needed to draw all faces
   this._dirty = true
 
   if (this._index) {
@@ -58,13 +60,19 @@ GLGeometry.prototype.faces = function faces(attr, opts) {
     , 'uint16'
   )
 
-  this._length = this._index.length * size
+  this._facesLength = this._index.length * size
   this._index = this._index.buffer
 
   return this
 }
 
 GLGeometry.prototype.attr = function attr(name, attr, opts) {
+
+  // If we get a simplicial complex
+  if (attr.cells && attr.positions) {
+    return this.attr(name, attr.positions).faces(attr.cells, opts)
+  }
+
   opts = opts || {}
   this._dirty = true
 
@@ -82,7 +90,6 @@ GLGeometry.prototype.attr = function attr(name, attr, opts) {
 
   var buffer = attribute.buffer
   var length = attribute.length
-  var index  = attribute.index
 
   this._keys.push(name)
   this._attributes.push({
@@ -91,11 +98,13 @@ GLGeometry.prototype.attr = function attr(name, attr, opts) {
   })
 
   if (first) {
-    this._length = length
-  }
+    this._attrLength = length
 
-  if (first && index) {
-    this._index = index
+  } else if (this._attrLength != length) {
+    throw new Error(
+        'Unexpected discrepancy in attributes size (was ' + this_attrLength
+      + ', now ' + attrLength+ ')'
+    )
   }
 
   return this
@@ -117,14 +126,15 @@ GLGeometry.prototype.bind = function bind(shader) {
 
 GLGeometry.prototype.draw = function draw(mode, start, stop) {
   start = typeof start === 'undefined' ? 0 : start
-  stop  = typeof stop  === 'undefined' ? this._length : stop
   mode  = typeof mode  === 'undefined' ? this.gl.TRIANGLES : mode
 
   this.update()
 
   if (this._vao._useElements) {
-    this.gl.drawElements(mode, stop - start, this._elementsType, start * this._elementsBytes) // "2" is sizeof(uint16)
+    stop  = typeof stop  === 'undefined' ? this._facesLength : stop
+    this.gl.drawElements(mode, stop - start, this._elementsType, start * this._elementsBytes)
   } else {
+    stop  = typeof stop  === 'undefined' ? this._attrLength : stop
     this.gl.drawArrays(mode, start, stop - start)
   }
 }
