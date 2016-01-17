@@ -1,21 +1,20 @@
-var createCamera  = require('canvas-orbit-camera')
-var mat4          = require('gl-matrix').mat4
-var pack          = require('array-pack-2d')
-var unindex       = require('unindex-mesh')
-var faceNormals   = require('face-normals')
+var createCamera = require('canvas-orbit-camera')
+var mat4 = require('gl-matrix').mat4
+var pack = require('array-pack-2d')
+var unindex = require('unindex-mesh')
+var faceNormals = require('face-normals')
 var createContext = require('gl-context')
-var fit           = require('canvas-fit')
-var ndarray       = require('ndarray')
-var normals       = require('normals')
-var glslify       = require('glslify')
-var bunny         = require('bunny')
-var createShader  = require('gl-shader')
+var ndarray = require('ndarray')
+var normals = require('normals')
+var glslify = require('glslify')
+var bunny = require('bunny')
+var createShader = require('gl-shader')
 
-var createGeom    = require('./')
-var clear         = require('gl-clear')({
-    color: [0xF0/255, 0xF1/255, 0xF2/255, 1]
-  , depth: true
-  , stencil: false
+var createGeom = require('./')
+var clear = require('gl-clear')({
+  color: [0xF0 / 255, 0xF1 / 255, 0xF2 / 255, 1],
+  depth: true,
+  stencil: false
 })
 
 // handles simplicial complexes with cells/positions properties
@@ -42,30 +41,31 @@ createExample(pack(scPos.positions), scNor, pack(scPos.cells)).title = '.faces()
 // .faces(), order-independant
 createExample(scPos.positions, scNor, scPos.cells, true).title = '.faces(), First Call'
 
-function createExample(pos, norm, cells, facesFirst) {
-  var canvas     = document.body.appendChild(document.createElement('canvas'))
-  var gl         = createContext(canvas, render)
-  var camera     = createCamera(canvas)
+function createExample (pos, norm, cells, facesFirst) {
+  var canvas = document.body.appendChild(document.createElement('canvas'))
+  var gl = createContext(canvas, render)
+  var camera = createCamera(canvas)
   var projection = mat4.create()
-  var shader     = createShader(gl,
+  var shader = createShader(gl,
     glslify('./test.vert'),
     glslify('./test.frag')
   )
-  
+
   canvas.width = 300
   canvas.height = 300
   canvas.style.margin = '1em'
 
   var geom = createGeom(gl)
   if (cells && facesFirst) geom.faces(cells)
-  
-  geom.attr('position', pos)
+
+  geom
+    .attr('position', pos)
     .attr('normal', norm)
 
   if (cells && !facesFirst) geom.faces(cells)
 
-  function render() {
-    var width  = canvas.width
+  function render () {
+    var width = canvas.width
     var height = canvas.height
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null)
@@ -89,6 +89,6 @@ function createExample(pos, norm, cells, facesFirst) {
 
     camera.tick()
   }
-  
+
   return canvas
 }

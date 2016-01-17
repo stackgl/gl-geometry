@@ -4,7 +4,13 @@
   "description": "A flexible wrapper for gl-vao and gl-buffer that you can use to set up renderable WebGL geometries from a variety of different formats.",
   "main": "index.js",
   "scripts": {
-    "start": "budo test.js --open -- -t glslify"
+    "start": "budo test.js --open -- -t glslify",
+    "test": "standard"
+  },
+  "standard": {
+    "globals": [
+      "WebGLBuffer"
+    ]
   },
   "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughsk.io/)",
   "license": "MIT",
@@ -30,6 +36,7 @@
     "glslify": "^3.1.0",
     "ndarray": "^1.0.15",
     "normals": "^0.1.0",
+    "standard": "^5.4.1",
     "unindex-mesh": "0.0.0"
   },
   "repository": {
