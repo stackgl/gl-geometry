@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hughsk/gl-geometry.git"
+    "url": "git://github.com/stackgl/gl-geometry.git"
   },
   "bugs": {
-    "url": "https://github.com/hughsk/gl-geometry/issues"
+    "url": "https://github.com/stackgl/gl-geometry/issues"
   },
-  "homepage": "https://github.com/hughsk/gl-geometry",
+  "homepage": "https://github.com/stackgl/gl-geometry",
   "keywords": [
     "gl",
     "webgl",
