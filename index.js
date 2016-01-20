@@ -82,6 +82,7 @@ GLGeometry.prototype.attr = function attr (name, attr, opts) {
     var toUpdate = this._attributes[keyIndex].buffer
     var offset = opts.offset || 0
     normalize.update(toUpdate, attr, size, 'float32', offset)
+    this._attrLength = toUpdate.length / size / 4
     return this
   }
 
@@ -109,12 +110,6 @@ GLGeometry.prototype.attr = function attr (name, attr, opts) {
 
   if (first) {
     this._attrLength = length
-  } else
-  if (this._attrLength !== length) {
-    throw new Error(
-      'Unexpected discrepancy in attributes size (was ' + this._attrLength +
-      ', now ' + length + ')'
-    )
   }
 
   return this
