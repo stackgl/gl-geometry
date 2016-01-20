@@ -4,33 +4,10 @@ var createBuffer = require('gl-buffer')
 var isnd = require('isndarray')
 var dtype = require('dtype')
 
-module.exports = normalize
+module.exports.create = create
+module.exports.update = update
 
-function normalize (gl, attr, size, mode, type) {
-  // if we get a nested 2D array
-  if (Array.isArray(attr) && Array.isArray(attr[0])) {
-    return {
-      buffer: createBuffer(gl, pack(attr, type), mode),
-      length: attr.length
-    }
-  }
-
-  // if we get a nested 2D array (with the second array being typed)
-  if (Array.isArray(attr) && ista(attr[0])) {
-    return {
-      buffer: createBuffer(gl, pack(attr, type), mode),
-      length: (attr.length * attr[0].length) / size
-    }
-  }
-
-  // if we get a 1D array
-  if (Array.isArray(attr)) {
-    return {
-      buffer: createBuffer(gl, new (dtype(type))(attr), mode),
-      length: attr.length / size
-    }
-  }
-
+function create (gl, attr, size, mode, type) {
   // if we get a gl-buffer
   if (attr.handle instanceof WebGLBuffer) {
     return {
@@ -39,10 +16,52 @@ function normalize (gl, attr, size, mode, type) {
     }
   }
 
+  var arr = normalize(attr, size, type)
+  return {
+    buffer: createBuffer(gl, arr.data, mode),
+    length: arr.length
+  }
+}
+
+function update (buffer, attr, size, type, offset) {
+  // if we get a gl-buffer
+  if (attr.handle instanceof WebGLBuffer) {
+    throw new Error('Unhandled update case: WebGLBuffer')
+  }
+
+  var arr = normalize(attr, size, type)
+  buffer.update(arr.data, offset)
+}
+
+function normalize (attr, size, type) {
+  // if we get a nested 2D array
+  if (Array.isArray(attr) && Array.isArray(attr[0])) {
+    return {
+      data: pack(attr, type),
+      length: attr.length
+    }
+  }
+
+  // if we get a nested 2D array (with the second array being typed)
+  if (Array.isArray(attr) && ista(attr[0])) {
+    return {
+      data: pack(attr, type),
+      length: (attr.length * attr[0].length) / size
+    }
+  }
+
+  // if we get a 1D array
+  if (Array.isArray(attr)) {
+    return {
+      data: new (dtype(type))(attr),
+      length: attr.length / size
+    }
+  }
+
   // if we get an ndarray
   if (isnd(attr)) {
     return {
-      buffer: createBuffer(gl, attr, mode),
+      data: attr,
       length: ndlength(attr.shape) / size
     }
   }
@@ -54,7 +73,7 @@ function normalize (gl, attr, size, mode, type) {
     }
 
     return {
-      buffer: createBuffer(gl, attr, mode),
+      data: attr,
       length: attr.length / size
     }
   }
