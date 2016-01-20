@@ -80,7 +80,7 @@ GLGeometry.prototype.attr = function attr (name, attr, opts) {
   var keyIndex = this._keys.indexOf(name)
   if (keyIndex > -1) {
     var toUpdate = this._attributes[keyIndex].buffer
-    var offset = opts.offset || 0
+    var offset = opts.offset || undefined
     normalize.update(toUpdate, attr, size, 'float32', offset)
     this._attrLength = toUpdate.length / size / 4
     return this
