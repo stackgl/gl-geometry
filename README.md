@@ -55,17 +55,17 @@ The following vertex formats are supported and will be normalized:
     ]
   }
   ```
-  
+
 You can specify `opt.size` for the vertex size, defaults to 3.
 
-Attribute value can be updated by calling `attr` again with the same `name`:
+You can update attribute values by calling `attr` again with the same `name`:
 
-* By default the whole content of the associated `gl-buffer` is replaced by `data`;
-the buffer will be resized accordingly.
+* By default the entire contents of the associated `gl-buffer` are replaced by
+`data`; the buffer will be resized accordingly.
 
-* Alternatively, only part of the buffer content can be updated. To do so,
-set `opt.offset` (in bytes) to specify at which offset `data` will be
-copied. In this case, the buffer cannot be resized.
+* Alternatively, you can pass `opt.offset` to copy `data` into the current
+buffer at a specific offset (in bytes). In this case, the buffer cannot be
+resized.
 
 ### geom.faces(values[, opt]) ###
 
