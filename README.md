@@ -14,7 +14,7 @@ Creates a new geometry attached to the WebGL canvas context `gl`.
 
 ### geom.attr(name, values[, opt]) ###
 
-Define a new attribute value, for example using a simplicial complex:
+Define or update an attribute value, for example using a simplicial complex:
 
 ``` javascript
 var createGeometry = require('gl-geometry')
@@ -57,6 +57,15 @@ The following vertex formats are supported and will be normalized:
   ```
   
 You can specify `opt.size` for the vertex size, defaults to 3.
+
+Attribute value can be updated by calling `attr` again with the same `name`:
+
+* By default the whole content of the associated `gl-buffer` is replaced by `data`;
+the buffer will be resized accordingly.
+
+* Alternatively, only part of the buffer content can be updated. To do so,
+set `opt.offset` (in bytes) to specify at which offset `data` will be
+copied. In this case, the buffer cannot be resized.
 
 ### geom.faces(values[, opt]) ###
 

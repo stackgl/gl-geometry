@@ -54,7 +54,7 @@ GLGeometry.prototype.faces = function faces (attr, opts) {
     this._index.dispose()
   }
 
-  this._index = normalize(this.gl
+  this._index = normalize.create(this.gl
     , attr
     , size
     , this.gl.ELEMENT_ARRAY_BUFFER
@@ -74,13 +74,24 @@ GLGeometry.prototype.attr = function attr (name, attr, opts) {
   }
 
   opts = opts || {}
+  var size = opts.size || 3
+
+  // Is this a known attribute (ie, an update)?
+  var keyIndex = this._keys.indexOf(name)
+  if (keyIndex > -1) {
+    var toUpdate = this._attributes[keyIndex].buffer
+    var offset = opts.offset || undefined
+    normalize.update(toUpdate, attr, size, 'float32', offset)
+    this._attrLength = toUpdate.length / size / 4
+    return this
+  }
+
   this._dirty = true
 
   var gl = this.gl
   var first = !this._attributes.length
-  var size = opts.size || 3
 
-  var attribute = normalize(gl, attr, size, gl.ARRAY_BUFFER, 'float32')
+  var attribute = normalize.create(gl, attr, size, gl.ARRAY_BUFFER, 'float32')
   if (!attribute) {
     throw new Error(
       'Unexpected attribute format: needs an ndarray, array, typed array, ' +
@@ -99,12 +110,6 @@ GLGeometry.prototype.attr = function attr (name, attr, opts) {
 
   if (first) {
     this._attrLength = length
-  } else
-  if (this._attrLength !== length) {
-    throw new Error(
-      'Unexpected discrepancy in attributes size (was ' + this._attrLength +
-      ', now ' + length + ')'
-    )
   }
 
   return this
