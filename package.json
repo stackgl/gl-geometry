@@ -39,6 +39,7 @@
     "standard": "^5.4.1",
     "unindex-mesh": "0.0.0",
     "parse-wavefront-obj": "^1.0.1",
+    "parse-pc2": "^1.0.1",
     "brfs": "^1.4.3"
   },
   "repository": {

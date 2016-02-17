@@ -10,6 +10,7 @@ var glslify = require('glslify')
 var bunny = require('bunny')
 var createShader = require('gl-shader')
 var parseOBJ = require('parse-wavefront-obj')
+var pc2Parser = require('parse-pc2')
 var fs = require('fs')
 
 var createGeom = require('../')
@@ -105,7 +106,7 @@ function createExample (pos, norm, cells, options) {
 }
 
 function createAttributeUpdateExample () {
-  var anim = parsePC2(fs.readFileSync(__dirname + '/basicCloth.pc2'))
+  var anim = pc2Parser.toObject(fs.readFileSync(__dirname + '/basicCloth.pc2'))
   var obj = parseOBJ(fs.readFileSync(__dirname + '/basicCloth.obj'))
   var norms = normals.vertexNormals(obj.cells, obj.positions)
 
@@ -127,34 +128,4 @@ function createAttributeUpdateExample () {
   }
 
   return createExample(obj, norms, null, {noculling: true, update: update, zoom: 4})
-}
-
-// Basic parser implemented using informations from
-// http://mattebb.com/projects/bpython/pointcache/export_pc2.py
-function parsePC2 (buf) {
-  var pc2 = {}
-
-  // Read header
-  pc2.numPoints = buf.readUInt32LE(16)  // Number of points per sample
-  pc2.startFrame = buf.readFloatLE(20)  // First sampled frame
-  pc2.sampleRate = buf.readFloatLE(24)  // How frequently to sample (or skip) the frames
-  pc2.numSamples = buf.readUInt32LE(28) // How many samples are stored in this file
-
-  // Read data
-  var off = 32
-  pc2.frames = []
-  for (var f = pc2.startFrame; f < pc2.startFrame + pc2.numSamples; f += pc2.sampleRate) {
-    var frame = []
-    for (var i = 0; i < pc2.numPoints; i++) {
-      var point = []
-      for (var j = 0; j < 3; j++) {
-        point.push(buf.readFloatLE(off))
-        off += 4
-      }
-      frame.push(point)
-    }
-    pc2.frames.push(frame)
-  }
-
-  return pc2
 }
