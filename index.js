@@ -67,7 +67,7 @@ GLGeometry.prototype.faces = function faces (attr, opts) {
   return this
 }
 
-GLGeometry.prototype.attr = function attr (name, attr, opts) {
+GLGeometry.prototype.attr = function (name, attr, opts) {
   // If we get a simplicial complex
   if (attr.cells && attr.positions) {
     return this.attr(name, attr.positions).faces(attr.cells, opts)
