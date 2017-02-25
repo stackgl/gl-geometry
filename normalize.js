@@ -8,8 +8,13 @@ module.exports.create = create
 module.exports.update = update
 
 
+/**
+ * Check for WebGLBuffer
+ * @param {object} attr
+ * @returns {boolean}
+ */
 function isWebGLBuffer(attr){
-  return typeof WebGLBuffer !== "undefined" && attr.handle instanceof WebGLBuffer;
+  return (typeof WebGLBuffer !== "undefined" && attr.handle instanceof WebGLBuffer);
 }
 
 function create (gl, attr, size, mode, type) {
