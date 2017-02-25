@@ -7,9 +7,14 @@ var dtype = require('dtype')
 module.exports.create = create
 module.exports.update = update
 
+
+function isWebGLBuffer(attr){
+  return typeof WebGLBuffer !== "undefined" && attr.handle instanceof WebGLBuffer;
+}
+
 function create (gl, attr, size, mode, type) {
   // if we get a gl-buffer
-  if (attr.handle instanceof WebGLBuffer) {
+  if (isWebGLBuffer(attr)) {
     return {
       buffer: attr,
       length: attr.length / size / 4
@@ -25,7 +30,7 @@ function create (gl, attr, size, mode, type) {
 
 function update (buffer, attr, size, type, offset) {
   // if we get a gl-buffer
-  if (attr.handle instanceof WebGLBuffer) {
+  if (isWebGLBuffer(attr)) {
     throw new Error('Unhandled update case: WebGLBuffer')
   }
 
