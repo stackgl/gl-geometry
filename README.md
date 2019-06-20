@@ -89,6 +89,11 @@ var geom = createGeometry(gl)
 
 You can specify `opt.size` for the cell size, defaults to 3.
 
+You can specify `opt.elementsBytes` for the element byte size, defaults to 2.
+Can be 1 or 2. If the context is a WebGL 2 context or the extension
+`OES_element_index_uint` is enabled in a WebGL 1 context, opt.elementsBytes
+may additionally be 4.
+
 ### geom.bind([shader]) ###
 
 Binds the underlying [VAO](https://github.com/stackgl/gl-vao) – this must
