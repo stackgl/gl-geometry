@@ -46,6 +46,7 @@ GLGeometry.prototype.dispose = function () {
 
 GLGeometry.prototype.faces = function faces (attr, opts) {
   var size = opts && opts.size || 3
+  var elementsBytes = opts && opts.elementsBytes || 2
   attr = attr.cells ? attr.cells : attr
 
   this._dirty = true
@@ -54,13 +55,27 @@ GLGeometry.prototype.faces = function faces (attr, opts) {
     this._index.dispose()
   }
 
+  if ( elementsBytes == 1 )
+  {
+      this._elementsType = this.gl.UNSIGNED_BYTE
+  }
+  else if ( elementsBytes == 2 )
+  {
+      this._elementsType = this.gl.UNSIGNED_SHORT
+  }
+  else if ( elementsBytes == 4 )
+  {
+      this._elementsType = this.gl.UNSIGNED_INT
+  }
+
   this._index = normalize.create(this.gl
     , attr
     , size
     , this.gl.ELEMENT_ARRAY_BUFFER
-    , 'uint16'
+    , glType(this._elementsType)
   )
 
+  this._elementsBytes = elementsBytes;
   this._facesLength = this._index.length * size
   this._index = this._index.buffer
 
@@ -155,7 +170,7 @@ GLGeometry.prototype.update = function update () {
   this._dirty = false
   if (this._vao) this._vao.dispose()
 
-  this._vao = createVAO(this.gl, this._attributes, this._index)
+  this._vao = createVAO(this.gl, this._attributes, this._index, this._elementsType)
   this._elementsType = this._vao._elementsType
   this._elementsBytes = dtype(
     glType(this._elementsType) || 'array'
